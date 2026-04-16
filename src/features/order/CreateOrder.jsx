@@ -133,7 +133,6 @@ export async function action({ request }) {
   const formData = await request.formData();
   // console.log(typeof(formData));
   const data = Object.fromEntries(formData);
-  console.log(data);
 
   const order = {
     ...data,
@@ -150,6 +149,8 @@ export async function action({ request }) {
   const newOrder = await createOrder(order);
 
   store.dispatch(clearCart());
+  console.log(newOrder)
+  console.log(newOrder.id)
 
   return redirect(`/order/${newOrder.id}`);
 

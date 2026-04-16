@@ -1,4 +1,4 @@
-const API_URL = 'https://react-fast-pizza-api.jonas.io/api';
+const API_URL = 'https://pizza-x-backend.onrender.com/api';
 
 export async function getMenu() {
   const res = await fetch(`${API_URL}/menu`);
@@ -12,28 +12,36 @@ export async function getMenu() {
 }
 
 export async function getOrder(id) {
+  console.log(id)
   const res = await fetch(`${API_URL}/order/${id}`);
   if (!res.ok) throw Error(`Couldn't find order #${id}`);
+  const orderData = await res.json();
+  console.log(orderData)
 
-  const { data } = await res.json();
-  return data;
+  return orderData;
 }
 
 export async function createOrder(newOrder) {
   try {
     const res = await fetch(`${API_URL}/order`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(newOrder),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
-    if (!res.ok) throw Error();
-    const { data } = await res.json();
-    return data;
-  } catch {
-    throw Error('Failed creating your order');
+    console.log("status:", res.status);
+
+    const result = await res.json();
+    console.log(result);
+
+    if (!res.ok) throw Error(result.message || "Request failed");
+
+    return result.data;
+  } catch (err) {
+    console.error(err);
+    throw Error("Failed creating your order");
   }
 }
 
